@@ -708,7 +708,7 @@ var uaStrings = []struct {
 	},
 	{
 		title:    "MicroMessengerVersion",
-		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessengerVersion/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
+		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
 		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Chrome-53.0.2785.143 Engine:AppleWebKit-537.36 MicroMessenger:7.0.9.501 Bot:false Mobile:false",
 	},
 }
