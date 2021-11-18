@@ -21,16 +21,17 @@ type section struct {
 // The UserAgent struct contains all the info that can be extracted
 // from the User-Agent string.
 type UserAgent struct {
-	ua           string
-	mozilla      string
-	platform     string
-	os           string
-	localization string
-	model        string
-	browser      Browser
-	bot          bool
-	mobile       bool
-	undecided    bool
+	ua                    string
+	mozilla               string
+	platform              string
+	os                    string
+	localization          string
+	model                 string
+	microMessengerVersion string
+	browser               Browser
+	bot                   bool
+	mobile                bool
+	undecided             bool
 }
 
 // Read from the given string until the given delimiter or the
@@ -161,6 +162,7 @@ func (p *UserAgent) Parse(ua string) {
 		p.detectBrowser(sections)
 		p.detectOS(sections[0])
 		p.detectModel(sections[0])
+		p.detectMicroMessenger(sections)
 
 		if p.undecided {
 			p.checkBot(sections)
@@ -187,4 +189,8 @@ func (p *UserAgent) Mobile() bool {
 // UA returns the original given user agent.
 func (p *UserAgent) UA() string {
 	return p.ua
+}
+
+func (p *UserAgent) MicroMessengerVersion() string {
+	return p.microMessengerVersion
 }
