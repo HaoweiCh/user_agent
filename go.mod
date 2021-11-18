@@ -1,3 +1,3 @@
-module github.com/mssola/user_agent
+module github.com/HaoweiCh/user_agent
 
-go 1.13
+go 1.17

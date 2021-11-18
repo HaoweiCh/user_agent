@@ -20,9 +20,9 @@ what you want.
 
 ## Issue reporting
 
-I'm using [Github](https://github.com/mssola/user_agent) in order to host the
+I'm using [Github](https://github.com/HaoweiCh/user_agent) in order to host the
 code. Thus, in order to report issues you can do it on its [issue
-tracker](https://github.com/mssola/user_agent/issues). A couple of notes on
+tracker](https://github.com/HaoweiCh/user_agent/issues). A couple of notes on
 reports:
 
 - Check that the issue has not already been reported or fixed in `master`.
