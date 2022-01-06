@@ -50,7 +50,12 @@ func (p *UserAgent) detectBrowser(sections []section) {
 		engine := sections[1]
 		p.browser.Engine = engine.name
 		p.browser.EngineVersion = engine.version
-		if slen > 2 {
+
+		detected := false
+		if slen > 4 {
+			detected = p.detectBrowserSection(&sections[slen-4])
+		}
+		if slen > 2 && !detected {
 			sectionIndex := 2
 			// The version after the engine comment is empty on e.g. Ubuntu
 			// platforms so if this is the case, let's use the next in line.
@@ -175,6 +180,25 @@ func (p *UserAgent) detectBrowser(sections []section) {
 			}
 		}
 	}
+}
+
+func (p *UserAgent) detectBrowserSection(sections ...*section) bool {
+	for _, s := range sections {
+		switch s.name {
+		case "AlipayClient":
+			p.browser.Name = "Alipay MiniProgram"
+			p.browser.Version = s.version
+			return true
+
+		case "MicroMessenger":
+			p.browser.Name = "Wechat MiniProgram"
+			p.browser.Version = s.version
+			return true
+
+		}
+	}
+
+	return false
 }
 
 // Engine returns two strings. The first string is the name of the engine and the

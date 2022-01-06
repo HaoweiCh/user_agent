@@ -5,7 +5,6 @@
 package user_agent
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 )
@@ -706,71 +705,29 @@ var uaStrings = []struct {
 		ua:       "Mozilla/5.0 (Linux; U; Android 2.2.1; zh-cn; HTC_Wildfire_A3333 Build/FRG83D) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1",
 		expected: "Mozilla:5.0 Platform:Linux OS:Android 2.2.1 Localization:zh-cn Model:HTC_Wildfire_A3333 Browser:Android-4.0 Engine:AppleWebKit-533.1 Bot:false Mobile:true",
 	},
+
+	// MicroMessenger
 	{
 		title:    "MicroMessengerVersion",
 		ua:       "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36 MicroMessenger/7.0.9.501 NetType/WIFI MiniProgramEnv/Windows WindowsWechat",
-		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:Chrome-53.0.2785.143 Engine:AppleWebKit-537.36 MicroMessenger:7.0.9.501 Bot:false Mobile:false",
+		expected: "Mozilla:5.0 Platform:Windows OS:Windows 7 Browser:MicroMessenger-7.0.9.501 Engine:AppleWebKit-537.36 MicroMessenger:7.0.9.501 Bot:false Mobile:false",
 	},
-}
 
-// Internal: beautify the UserAgent reference into a string so it can be
-// tested later on.
-//
-// ua - a UserAgent reference.
-//
-// Returns a string that contains the beautified representation.
-func beautify(ua *UserAgent) (s string) {
-	if len(ua.Mozilla()) > 0 {
-		s += "Mozilla:" + ua.Mozilla() + " "
-	}
-	if len(ua.Platform()) > 0 {
-		s += "Platform:" + ua.Platform() + " "
-	}
-	if len(ua.OS()) > 0 {
-		s += "OS:" + ua.OS() + " "
-	}
-	if len(ua.Localization()) > 0 {
-		s += "Localization:" + ua.Localization() + " "
-	}
-	if len(ua.Model()) > 0 {
-		s += "Model:" + ua.Model() + " "
-	}
-	str1, str2 := ua.Browser()
-	if len(str1) > 0 {
-		s += "Browser:" + str1
-		if len(str2) > 0 {
-			s += "-" + str2 + " "
-		} else {
-			s += " "
-		}
-	}
-	str1, str2 = ua.Engine()
-	if len(str1) > 0 {
-		s += "Engine:" + str1
-		if len(str2) > 0 {
-			s += "-" + str2 + " "
-		} else {
-			s += " "
-		}
-	}
-
-	str1 = ua.MicroMessengerVersion()
-	if len(str1) > 0 {
-		s += "MicroMessenger:" + str1 + " "
-	}
-
-	s += "Bot:" + fmt.Sprintf("%v", ua.Bot()) + " "
-	s += "Mobile:" + fmt.Sprintf("%v", ua.Mobile())
-	return s
+	// Alipay
+	{
+		title:    "alipay",
+		ua:       "Mozilla/5.0 (iPhone; CPU iPhone OS 14_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/18D52 Ariver/1.1.0 AliApp(AP/10.2.51.6000) Nebula WK RVKType(0) AlipayDefined(nt:WIFI,ws:320|504|2.0) AlipayClient/10.2.51.6000 Language/en Region/CN NebulaX/1.0.0",
+		expected: "Mozilla:5.0 Platform:iPhone OS:CPU iPhone OS 14_4 like Mac OS X Model:iPhone Browser:AlipayClient-10.2.51.6000 Engine:AppleWebKit-605.1.15 Bot:false Mobile:true",
+	},
 }
 
 // The test suite.
 func TestUserAgent(t *testing.T) {
 	for _, tt := range uaStrings {
 		ua := New(tt.ua)
-		got := beautify(ua)
+		got := ua.Prettify()
 		if tt.expected != got {
-			t.Errorf("\nTest     %v\ngot:     %q\nexpected %q\n", tt.title, got, tt.expected)
+			t.Errorf("\nTest     %v\nua:     %q\ngot:     %q\nexpected %q\n", tt.title, tt.ua, got, tt.expected)
 		}
 
 		if tt.expectedOS != nil {

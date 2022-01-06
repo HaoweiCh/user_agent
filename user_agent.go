@@ -8,7 +8,10 @@
 // information that has been extracted from a parsed User Agent string.
 package user_agent
 
-import "strings"
+import (
+	"fmt"
+	"strings"
+)
 
 // A section contains the name of the product, its version and
 // an optional comment.
@@ -72,6 +75,13 @@ func readUntil(ua string, index *int, delimiter byte, cat bool) []byte {
 func parseProduct(product []byte) (string, string) {
 	prod := strings.SplitN(string(product), "/", 2)
 	if len(prod) == 2 {
+		nameSlice := strings.SplitN(prod[0], "(", 2)
+		if len(nameSlice) == 2 {
+			//prod[0] = nameSlice[0]
+			//prod[1] = "(" + nameSlice[1] + "/" + prod[1]
+			return fmt.Sprintf("%s(%s/%s", nameSlice[0], nameSlice[1], prod[1]), ""
+		}
+
 		return prod[0], prod[1]
 	}
 	return string(product), ""
@@ -193,4 +203,57 @@ func (p *UserAgent) UA() string {
 
 func (p *UserAgent) MicroMessengerVersion() string {
 	return p.microMessengerVersion
+}
+
+// Prettify
+//
+// beautify the UserAgent reference into a string
+//
+// ua - a UserAgent reference.
+//
+// Returns a string that contains the beautified representation.
+func (p *UserAgent) Prettify() (ua string) {
+	if len(p.Mozilla()) > 0 {
+		ua += "Mozilla:" + p.Mozilla() + " "
+	}
+	if len(p.Platform()) > 0 {
+		ua += "Platform:" + p.Platform() + " "
+	}
+	if len(p.OS()) > 0 {
+		ua += "OS:" + p.OS() + " "
+	}
+	if len(p.Localization()) > 0 {
+		ua += "Localization:" + p.Localization() + " "
+	}
+	if len(p.Model()) > 0 {
+		ua += "Model:" + p.Model() + " "
+	}
+	str1, str2 := p.Browser()
+	if len(str1) > 0 {
+		ua += "Browser:" + str1
+		if len(str2) > 0 {
+			ua += "-" + str2 + " "
+		} else {
+			ua += " "
+		}
+	}
+	str1, str2 = p.Engine()
+	if len(str1) > 0 {
+		ua += "Engine:" + str1
+		if len(str2) > 0 {
+			ua += "-" + str2 + " "
+		} else {
+			ua += " "
+		}
+	}
+
+	str1 = p.MicroMessengerVersion()
+	if len(str1) > 0 {
+		ua += "MicroMessenger:" + str1 + " "
+	}
+
+	ua += "Bot:" + fmt.Sprintf("%v", p.Bot()) + " "
+	ua += "Mobile:" + fmt.Sprintf("%v", p.Mobile())
+
+	return
 }
