@@ -1,10 +1,22 @@
 package user_agent
 
 import (
+	_ "embed"
 	"encoding/json"
 	"io/ioutil"
 	"strings"
 )
+
+var (
+	DefaultFactors Factors
+
+	//go:embed factors.json
+	defaultFactors []byte
+)
+
+func init() {
+	_ = json.Unmarshal(defaultFactors, &DefaultFactors)
+}
 
 type Factors struct {
 	MicroMessengerVersions []string `json:"micro_messenger_versions"`
@@ -57,8 +69,6 @@ func (f *Factors) Generate(filePath string) error {
 			continue
 		}
 
-		//UserAgents[i] = line
-
 		ua := New(line)
 		version := ua.MicroMessengerVersion()
 		if version != "" {
@@ -96,4 +106,13 @@ func (f *Factors) Generate(filePath string) error {
 	}
 
 	return nil
+}
+
+func (f Factors) String() string {
+	indented, _ := json.MarshalIndent(map[string]interface{}{
+		"AppleWebKitVersions":    len(f.AppleWebKitVersions),
+		"OsVersions":             len(f.OsVersions),
+		"MicroMessengerVersions": len(f.MicroMessengerVersions),
+	}, "", " ")
+	return string(indented)
 }

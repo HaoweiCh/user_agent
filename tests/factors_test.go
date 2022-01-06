@@ -9,7 +9,10 @@ import (
 )
 
 func TestFactors(t *testing.T) {
-	t.Run("dev", func(t *testing.T) {
+	t.Run("check", func(t *testing.T) {
+		t.Logf("%s", user_agent.DefaultFactors)
+	})
+	t.Run("generate", func(t *testing.T) {
 		factors := user_agent.Factors{}
 		assert.NoError(t, factors.Load("../factors.json"))
 		assert.NoError(t, factors.Generate("../factors_raw.txt"))
